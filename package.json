@@ -1,0 +1,15 @@
+{
+  "name": "learn_webpack",
+  "version": "1.0.0",
+  "description": "webpack course taught by coderwhy",
+  "main": "./src/main.js",
+  "scripts": {
+    "build": "webpack --config wk.config.js"
+  },
+  "author": "Kaifeng Xue",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
+}
