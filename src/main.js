@@ -1,5 +1,10 @@
+// for babel ==========
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+// ====================
 import { printInfo } from "./js/foo.js";
-const { address } = require("./js/bar.js");
+const { address } = require("./js/bar.ts");
+import "./js/baz.jsx";
 
 import "./css/title.css";
 import "./css/image.less";
