@@ -5,6 +5,8 @@
   "main": "./src/main.js",
   "scripts": {
     "build": "webpack --config wk.config.js",
+    "watch": "webpack --watch",
+    "serve": "webpack serve --config wk.config.js",
     "type-check": "tsc --noEmit",
     "type-check-watch": "tsc --noEmit --watch"
   },
@@ -43,7 +45,8 @@
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.65.0",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.1"
   },
   "dependencies": {
     "core-js": "^3.20.1",

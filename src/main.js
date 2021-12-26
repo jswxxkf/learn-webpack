@@ -43,3 +43,10 @@ document.body.appendChild(iEl);
 new Vue({
   render: (h) => h(App),
 }).$mount("#app-vue");
+
+// for HMR
+if (module.hot) {
+  module.hot.accept("./js/foo.js", () => {
+    console.log("foo发生了更新");
+  });
+}
