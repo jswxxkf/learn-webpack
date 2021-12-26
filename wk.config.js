@@ -3,6 +3,8 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const { DefinePlugin } = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 
 module.exports = {
   mode: "production",
@@ -25,7 +27,7 @@ module.exports = {
         test: /\.ts$/,
         exclude: /node_modules/,
         use: {
-          loader: "ts-loader",
+          loader: "babel-loader",
         },
       },
       {
@@ -74,6 +76,10 @@ module.exports = {
           filename: "font/[name].[hash:6][ext]",
         },
       },
+      {
+        test: /\.vue/,
+        use: "vue-loader",
+      },
     ],
   },
   plugins: [
@@ -95,5 +101,9 @@ module.exports = {
         },
       ],
     }),
+    new ESLintWebpackPlugin({
+      exclude: "**/*.vue",
+    }),
+    new VueLoaderPlugin(),
   ],
 };
