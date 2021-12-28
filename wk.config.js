@@ -13,7 +13,7 @@ module.exports = {
   output: {
     filename: "js/bundle.js",
     path: path.resolve(__dirname, "./build"),
-    // publicPath: "/",
+    publicPath: "/abc",
   },
   module: {
     rules: [
@@ -108,6 +108,39 @@ module.exports = {
     new VueLoaderPlugin(),
   ],
   devServer: {
-    hot: true,
+    hot: "only",
+    host: "0.0.0.0",
+    port: 8090,
+    // open: true,
+    compress: true,
+    static: {
+      publicPath: "/abc",
+      directory: path.resolve(__dirname, "./abc"),
+    },
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8088",
+        pathRewrite: {
+          "^/api": "",
+        },
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      "@@": path.resolve(__dirname, "./src/js"),
+    },
+    mainFiles: ["index"],
+    extensions: [
+      ".wasm",
+      ".mjs",
+      ".js",
+      ".json",
+      ".jsx",
+      ".ts",
+      ".tsx",
+      ".vue",
+    ],
   },
 };

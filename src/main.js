@@ -9,9 +9,9 @@ import "./css/title.css";
 import "./css/image.less";
 import "./font/iconfont.css";
 // react test
-import "./js/baz.jsx";
-import { printInfo } from "./js/foo.js";
-const { address } = require("./js/bar.ts");
+import "@@/baz.jsx";
+import { printInfo } from "@/js/foo";
+const { address } = require("@/js/bar.ts");
 
 printInfo();
 console.log(address);

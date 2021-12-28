@@ -21,5 +21,6 @@ module.exports = {
     "import/newline-after-import": "off",
     "linebreak-style": "off",
     "import/extensions": "off",
+    "import/no-unresolved": "off",
   },
 };
