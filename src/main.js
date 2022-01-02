@@ -1,3 +1,5 @@
+import _ from "lodash";
+import dayjs from "dayjs";
 // for babel(entry) ==========
 import "core-js/stable";
 import "regenerator-runtime/runtime";
@@ -12,9 +14,12 @@ import "./font/iconfont.css";
 import "@@/baz.jsx";
 import { printInfo } from "@/js/foo";
 const { address } = require("@/js/bar.ts");
+// vendor
 
 printInfo();
 console.log(address);
+_.join(["abc", "cba"]);
+console.log(`今天是${dayjs().date()}号 print in ./src/main.js`);
 
 const titleEl = document.createElement("h2");
 titleEl.innerHTML = "Hello Webpack!";
@@ -46,7 +51,7 @@ new Vue({
 
 // for HMR
 if (module.hot) {
-  module.hot.accept("./js/foo.js", () => {
-    console.log("foo发生了更新");
+  module.hot.accept("./js/baz.jsx", () => {
+    console.log("代码发生了更新");
   });
 }

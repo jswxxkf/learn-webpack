@@ -1,25 +1,42 @@
-const path = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HTMLWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { DefinePlugin } = require("webpack");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
-const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+// merge相关
+const { merge } = require("webpack-merge");
+const devConfig = require("./webpack.dev");
+const prodConfig = require("./webpack.prod");
 
-module.exports = {
-  mode: "production",
-  devtool: "nosources-source-map",
+const resolveApp = require("./paths");
+
+const commonConfig = {
+  // entry的相对路径是相对于context所在的路径(启动webpack的路径)
   entry: {
     main: "./src/main.js",
     index: "./src/index.js",
   },
   output: {
     filename: "js/[name].bundle.js",
-    path: path.resolve(__dirname, "./build"),
-    chunkFilename: "[name].chunk.js",
-    publicPath: "/abc",
+    path: resolveApp("./build"),
+    chunkFilename: "js/[name].chunk.js",
+  },
+  resolve: {
+    alias: {
+      "@": resolveApp("./src"),
+      "@@": resolveApp("./src/js"),
+    },
+    mainFiles: ["index"],
+    extensions: [
+      ".wasm",
+      ".mjs",
+      ".js",
+      ".json",
+      ".jsx",
+      ".ts",
+      ".tsx",
+      ".vue",
+    ],
   },
   module: {
     rules: [
@@ -83,66 +100,18 @@ module.exports = {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
-    new HTMLWebpackPlugin({
+    new HtmlWebpackPlugin({
       title: "KaifengXue Webpack",
       template: "./public/index.html",
     }),
     new DefinePlugin({
       BASE_URL: "'./'",
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: "public",
-          globOptions: {
-            ignore: ["**/index.html", "**/.DS_Store"],
-          },
-        },
-      ],
-    }),
     new ESLintWebpackPlugin({
       exclude: "**/*.vue",
     }),
     new VueLoaderPlugin(),
-    new ReactRefreshPlugin(),
   ],
-  devServer: {
-    hot: "only",
-    host: "0.0.0.0",
-    port: 8090,
-    // open: true,
-    compress: true,
-    static: {
-      publicPath: "/abc",
-      directory: path.resolve(__dirname, "./abc"),
-    },
-    proxy: {
-      "/api": {
-        target: "http://127.0.0.1:8088",
-        pathRewrite: {
-          "^/api": "",
-        },
-      },
-    },
-  },
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-      "@@": path.resolve(__dirname, "./src/js"),
-    },
-    mainFiles: ["index"],
-    extensions: [
-      ".wasm",
-      ".mjs",
-      ".js",
-      ".json",
-      ".jsx",
-      ".ts",
-      ".tsx",
-      ".vue",
-    ],
-  },
   optimization: {
     // 对代码进行压缩相关的操作
     minimizer: [
@@ -170,14 +139,22 @@ module.exports = {
         // 第三方库
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          filename: "[id].vendors.js",
+          filename: "js/[id].vendors.js",
           priority: -10,
         },
         default: {
-          filename: "[id].common.js",
+          filename: "js/[id].common.js",
           priority: -20,
         },
       },
     },
   },
+};
+
+module.exports = function common(env) {
+  const isProduction = env.production;
+  process.env.NODE_ENV = isProduction ? "production" : "development";
+
+  const config = isProduction ? prodConfig : devConfig;
+  return merge(commonConfig, config);
 };

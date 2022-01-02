@@ -1,5 +1,5 @@
-const name = "xkf";
-const age = 26;
+const name = "why";
+const age = 18;
 
 const printInfo = () => {
   console.log(`${name} is ${age} years old`);

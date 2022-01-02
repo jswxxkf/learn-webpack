@@ -8,7 +8,9 @@
     "watch": "webpack --watch",
     "serve": "webpack serve --config wk.config.js",
     "type-check": "tsc --noEmit",
-    "type-check-watch": "tsc --noEmit --watch"
+    "type-check-watch": "tsc --noEmit --watch",
+    "build2": "webpack --config ./config/webpack.common.js --env production",
+    "serve2": "webpack serve --config ./config/webpack.common.js --env development"
   },
   "author": "Kaifeng Xue",
   "license": "ISC",
@@ -17,6 +19,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@babel/preset-typescript": "^7.16.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
     "babel": "^6.23.0",
@@ -39,6 +42,7 @@
     "postcss": "^8.4.5",
     "postcss-loader": "^6.2.1",
     "postcss-preset-env": "^7.0.2",
+    "react-refresh": "^0.11.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.4",
@@ -46,10 +50,13 @@
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.65.0",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.7.1"
+    "webpack-dev-server": "^4.7.1",
+    "webpack-merge": "^5.8.0"
   },
   "dependencies": {
     "core-js": "^3.20.1",
+    "dayjs": "^1.10.7",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "styled-components": "^5.3.3",
