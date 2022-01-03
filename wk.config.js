@@ -7,6 +7,7 @@ const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   mode: "production",
@@ -20,6 +21,10 @@ module.exports = {
     path: path.resolve(__dirname, "./build"),
     chunkFilename: "[name].chunk.js",
     publicPath: "/abc",
+  },
+  externals: {
+    lodash: "_",
+    dayjs: "dayjs",
   },
   module: {
     rules: [
@@ -106,6 +111,9 @@ module.exports = {
     }),
     new VueLoaderPlugin(),
     new ReactRefreshPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "css/[name].[hash:6].css",
+    }),
   ],
   devServer: {
     hot: "only",
@@ -144,15 +152,11 @@ module.exports = {
     ],
   },
   optimization: {
-    // 对代码进行压缩相关的操作
     minimizer: [
       new TerserPlugin({
         extractComments: false,
       }),
     ],
-    // natural: 自然数 不推荐
-    // named: 使用包所在目录作为name 在开发环境推荐
-    // deterministic: 确定地生成id, 针对相同文件生成的id是不变的
     chunkIds: "deterministic",
     splitChunks: {
       // async针对异步导入拆包
@@ -179,5 +183,6 @@ module.exports = {
         },
       },
     },
+    runtimeChunk: "single",
   },
 };

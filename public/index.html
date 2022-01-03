@@ -17,6 +17,11 @@
     </noscript>
     <div id="app-vue"></div>
     <div id="app-react"></div>
+    <!-- 通过EJS模板的条件判断，是生产环境才引入CDN -->
+    <% if (process.env.NODE_ENV === 'production') { %>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+    <% } %>
     <!-- built files will be auto injected -->
   </body>
 </html>

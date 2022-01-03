@@ -3,23 +3,24 @@ const { DefinePlugin } = require("webpack");
 const VueLoaderPlugin = require("vue-loader/lib/plugin");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-// merge相关
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// 配置合并merge相关
 const { merge } = require("webpack-merge");
 const devConfig = require("./webpack.dev");
 const prodConfig = require("./webpack.prod");
-
+// 拼接cwd路径
 const resolveApp = require("./paths");
 
-const commonConfig = {
+const commonConfig = (isProduction) => ({
   // entry的相对路径是相对于context所在的路径(启动webpack的路径)
   entry: {
     main: "./src/main.js",
     index: "./src/index.js",
   },
   output: {
-    filename: "js/[name].bundle.js",
+    filename: "js/[name].[chunkhash:6].bundle.js",
     path: resolveApp("./build"),
-    chunkFilename: "js/[name].chunk.js",
+    chunkFilename: "js/[name].[contenthash:6].chunk.js",
   },
   resolve: {
     alias: {
@@ -50,7 +51,7 @@ const commonConfig = {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
+          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
           {
             loader: "css-loader",
             options: {
@@ -78,7 +79,7 @@ const commonConfig = {
         test: /\.(png|jpe?g|svg|gif)$/,
         type: "asset",
         generator: {
-          filename: "img/[name].[hash:6][ext]",
+          filename: "img/[name].[contenthash:6][ext]",
         },
         parser: {
           dataUrlCondition: {
@@ -90,7 +91,7 @@ const commonConfig = {
         test: /\.(ttf|eot|woff2?|json)$/i,
         type: "asset/resource",
         generator: {
-          filename: "font/[name].[hash:6][ext]",
+          filename: "font/[name].[contenthash:6][ext]",
         },
       },
       {
@@ -139,22 +140,27 @@ const commonConfig = {
         // 第三方库
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          filename: "js/[id].vendors.js",
+          filename: "js/[id].[hash:6].vendors.js",
           priority: -10,
         },
         default: {
-          filename: "js/[id].common.js",
+          filename: "js/[id].[hash:6].common.js",
           priority: -20,
         },
       },
     },
+    // true/multiple
+    // single
+    // Object: {name: xxx}
+    // 运行时相关的代码分包，包括模块的导入、解析等等
+    runtimeChunk: "single",
   },
-};
+});
 
 module.exports = function common(env) {
   const isProduction = env.production;
   process.env.NODE_ENV = isProduction ? "production" : "development";
 
   const config = isProduction ? prodConfig : devConfig;
-  return merge(commonConfig, config);
+  return merge(commonConfig(isProduction), config);
 };
