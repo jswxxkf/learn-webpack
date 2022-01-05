@@ -114,12 +114,6 @@ const commonConfig = (isProduction) => ({
     new VueLoaderPlugin(),
   ],
   optimization: {
-    // 对代码进行压缩相关的操作
-    minimizer: [
-      new TerserPlugin({
-        extractComments: false,
-      }),
-    ],
     // natural: 自然数 不推荐
     // named: 使用包所在目录作为name 在开发环境推荐
     // deterministic: 确定地生成id, 针对相同文件生成的id是不变的
